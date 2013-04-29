@@ -1,0 +1,112 @@
+﻿@model IEnumerable<MvcWebRole.Models.Proof>
+
+@{
+    ViewBag.Title = "Snapshot Proofs";
+}
+
+@if (!string.IsNullOrEmpty(Request.Params.Get("appName")) && !string.IsNullOrEmpty(Request.Params.Get("logName")))
+{
+    <h2>Snapshot Proofs for @Request.Params.Get("appName")'s @Request.Params.Get("logName")</h2>
+}
+else if (!string.IsNullOrEmpty(ViewBag.ApplicationName) && !string.IsNullOrEmpty(ViewBag.LogName))
+{
+    <h2>Snapshot Proofs for @ViewBag.ApplicationName's @ViewBag.LogName</h2>
+}
+else
+{
+    <h2>Snapshot Proofs</h2>
+}
+
+@Html.ValidationSummary(true)
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeBlock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SnapshotValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CoinbaseTransactionID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BitcoinTransactionHash)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BitcoinBlockNumber)
+        </th>
+        <th>
+            Confirmations
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProofBlobName)
+        </th>        
+        <th>
+            Auditing
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modeItem => item.TimeBlock)
+        </td>
+        <td class="breakline">
+            @Html.DisplayFor(modelItem => item.SnapshotValue)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CoinbaseTransactionID)
+        </td>
+        <td class="breakline">
+            @if (item.BitcoinTransactionHash != null)
+            {
+                @Html.Raw("<a href=\"http://blockchain.info/tx/" + item.BitcoinTransactionHash + "\">"+item.BitcoinTransactionHash + "</a>")
+            }
+        </td>
+        <td>
+            @if (item.BitcoinBlockNumber != null)
+            {
+                @Html.Raw("<a href=\"http://blockchain.info/block-height/" + item.BitcoinBlockNumber + "\">"+item.BitcoinBlockNumber + "</a>")
+            }
+        </td>
+        <td>
+            @(ViewBag.LatestBlockNumber - item.BitcoinBlockNumber + 1)
+        </td>
+        <td>
+            @Html.Raw("<input type=\"button\" title=\"Download Proof\" value=\"Download Proof\" onclick=\"location.href='"
+                + ViewData["BlobURL"] + "/" + item.ProofBlobName + "'\" class=\"button\" />")
+        </td>
+        <td>
+            @if(item.BitcoinBlockNumber == null || item.BitcoinTransactionHash == null)
+            {
+                using (@Html.BeginForm("Audit", "Proof", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+               
+                    <fieldset>
+                        <legend></legend>
+                        
+                        @Html.Hidden("PartitionKey", item.PartitionKey)
+                        @Html.Hidden("RowKey", item.RowKey)
+                        @Html.Hidden("ApplicationName", item.ApplicationName)
+                        @Html.Hidden("LogName", item.LogName)
+                        @Html.Hidden("SnapshotValue", item.SnapshotValue)
+                        @Html.Hidden("ProofBlobName", item.ProofBlobName)
+                        @Html.Hidden("TimeBlock", item.TimeBlock)
+                        @Html.Hidden("CoinbaseTransactionID", item.CoinbaseTransactionID)
+
+                       <input type="submit" value="Audit"/>
+
+                    </fieldset>
+                }
+            }
+        </td>
+    </tr>
+}
+
+</table>
+
+<br />
+
+@Html.ActionLink("Return to Proof Search", "Index")

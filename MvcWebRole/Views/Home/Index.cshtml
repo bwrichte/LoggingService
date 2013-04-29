@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "LMLTFY Homepage";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>Fork-Evident Logging Made Easy.</h1>
+                <h2>Give arbitrary logs consistency across views.</h2>
+            </hgroup>
+            <table>
+                <tr>
+                    <td>
+                        Logs are a basic security primitive where logged events critically must be consistent across time and perspective. 
+                    </td>
+                    <td>
+                        Currently, efficient data structures exist so anyone can construct tamper-evident logs.
+                    </td>
+                    <td>
+                        <span class="smallcaps">LetMeLogThatForYou</span> expands this realm and allows any log to obtain an additional fork-evidence property which they otherwise could not.
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+}
+
+<div class="homepage-data">
+    <h2>Why is <span class="smallcaps">LetMeLogThatForYou</span> Needed?</h2>
+    <h4>
+        Because existing solutions are inadequate to prove logs have consistency across world views.
+    </h4>
+    <p>
+        For example, a Merkle Hash Tree is able to provide logarithmic-sized membership proofs showing auditors that specific 
+        values are contained within the log and have not been changed. Additionally, the History Tree data structure uses 
+        versioned computation of hashes over a Merkle tree to prove distinct root log snapshots make consistent claims about past. 
+        Yet in all of these data structures, "forking" to two different world views is still possible:
+    </p>
+    <img src="~/Images/fork.png" class="forkimage"/>
+    <p>
+        Here, "Eve" could prove to both "Alice" and "Bob" that her log contains particular events and that they are entirely 
+        consistent with the past, but they have no way to determine, short of repeated communication, to know beyond a 
+        cryptographically-provable doubt that "Eve" has not forked her log.
+    </p>
+
+    <hr />
+    <h2>To get started, we suggest the following:</h2>
+    <table>
+        <tr>
+            <td class="big-num-cells">
+                <img src="~/Images/olLarge1.png" />
+            </td>
+            <td colspan="2">
+                <h4>@Html.Raw("<input type=\"button\" title=\"Subscribe\" value=\"Subscribe\" onclick=\"location.href='/Subscription/Subscribe'\" class=\"button\" />") to the <span class="smallcaps">Let Me Log That For You</span> Service</h4>
+                <p>Sign up your application and specific log by simply providing an email address. We'll then send you a confirmation email with a verification link and your personal <code>API Key</code>.</p>
+                <p>Your email address is only used for verification, we won't spam you with emails or give it away to anyone.</p>
+                <p><strong>Note</strong>: Your application is not guaranteed to be unique, only the App + Log combination.</p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>@Html.Raw("<input type=\"button\" title=\"Log\" value=\"Log\" onclick=\"location.href='/Snapshot/Log'\" class=\"button\" />") Your Snapshots Using Your <code>API Key</code></h4>
+                <p>While this can be done via the web interface, you will more likely want to integrate our @Html.ActionLink("Web API", "Index", "Documentation") into your application.</p>
+                <p><strong>Note</strong>: We only accept Hex-Encoded strings in order to optimize hashed values.  This is preferred as the snapshotted values are public information and hashing obscures this.</p>
+            </td>
+            <td class="big-num-cells">
+                <img src="~/Images/olLarge2.png" />
+            </td>   
+        </tr>
+        <tr>
+            <td class="big-num-cells">
+                <img src="~/Images/olLarge3.png" />
+            </td>
+            <td colspan="2">
+                <h4>@Html.Raw("<input type=\"button\" title=\"Download\" value=\"Download\" onclick=\"location.href='/Proof'\" class=\"button\" />") Your Fork-Evident Proofs</h4>
+                <p>Provide to or direct any auditor to your membership proof in the global <span class="smallcaps">Let Me Log That For You</span> Service.</p>
+                <p>Using our specified audit process (in combination with your own tamper-evident audit process), an auditor can cryptographically prove your log has not been forked with high-confidence.</p>
+                <p><strong>Note</strong>: You can get included into the global log (and thus a new proof) approximately every ten minutes.  Thus, forking may still be possible on short time-scales, but will be detectable within 10 minutes.</p>
+            </td>
+        </tr>
+    </table>
+</div>

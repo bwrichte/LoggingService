@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>A Spring 2013 Princeton Senior IW Project.</h2>
+</hgroup>
+
+<article>
+    <h2>The Problem</h2>
+    <p>
+        Even with tamper-evident data structures (such as those described <a href="http://tamperevident.cs.rice.edu/">here</a>), a log can be forked to show two different world views.
+    </p>
+    <p>
+        While collusion among auditors is a possible solution, there exist situations in which this is not always possible (e.g. network partitions, or difficulty of identifying and communicating with fellow auditors).
+    </p>
+    <h2>The Goal</h2>
+    <p>
+        To build a solution which maintains the properties of regular tamper-evident logs (genericness, efficiency, tamper-evidence) while also ensuring additional properties of fork-evidence with high-availability and public reachability.
+    </p>
+    <h2>The Observations</h2>
+    <ol>
+        <li><span class="escape">If there existed some secondary log our aditors "Alice" and "Bob" could see which was provably unforkable, then by writing snapshots of the first log into the second, "Eve" would not be able to show "Alice" and "Bob" two separate views of the original log.</span></li>
+        <li><span class="escape">Bitcoin, which is an online digital currency (see below), had two major problems it needed to solve: <br />
+            <ol>
+                <li>In order for Bitcoins to have value, the creation of them must be restricted</li>
+                <li>As with all digital currencies where bits can just be copied, Bitcoins needed to be prevented from being double spent</li>
+            </ol> 
+            Both of these problems were solved with computationally difficult hash puzzles in a process called "block mining" where mined coins generate new Bitcoins and blocks immortalize the previous transactions in a hash chain.</span>
+            <h4>What is Bitcoin?</h4>
+            <div><br /><iframe width="560" height="315" src="http://www.youtube.com/embed/Um63OQz3bjo" frameborder="0" allowfullscreen></iframe></div>
+        </li>
+        
+        <li><span class="escape">Bitcoin has strong financial incentives for the network to agree on a single transactional chain.</span></li>
+        <li><span class="escape">HashCash puzzles are finely tuned for nearly always 6 blocks mined per hour.</span></li>
+    </ol>
+    <h2>The Proposed Solution</h2>
+    <p>From these aforementioned observations, we propose a cloud service, <span class="smallcaps">Let Me Log That For You</span>, which achieves a solution to the aforementioned problem:</p>
+    <ul>
+        <li>Clients will give us snapshots of their tamper-evident logs (a.k.a. their root commitments), which are aggregated into our global history tree.</li>
+        <li>We then take the root commitment of our global history tree and write this into the Bitcoin log.</li>
+        <li>Following this, we provide for download the membership proofs of each uploaded snapshot in our tree.</li>
+        <li>We repeat this process approximately every 10 minutes to get one snapshot in each Bitcoin block that is mined.</li>
+        <li>Upon being audited, the clients provide a combination of our proof and their own tamper-evident proof(s) to show membership and consistency.</li>
+        <li>The auditor will then confirm, with some confidence level, that these proofs are valid on a non-forked log by checking for our root snapshot value in the publicly accessible Bitcoin log.</li>
+    </ul>
+    <h2>The Design</h2>
+    <p><span class="smallcaps">Let Me Log That For You</span> is architected as a cloud service on Azure, depicted as follows:</p>
+    <img src="~/Images/architecture.png" class="architectureimage"/>
+    <p>In addition, the <span class="smallcaps">LetMeLogThatForYou</span> cloud service is powered by <a href="https://coinbase.com/">Coinbase</a> in order to connect with Bitcoin.</p>
+</article>
+
+<aside>
+    <h3>Additional Info</h3>
+    <p>
+        Feel free to donate to the service to keep it running.
+    </p>
+    <div>
+        <a class="coinbase-button" data-code="490151efc6acdfdeb1a23537b150cae7" data-button-style="donation_large" href="https://coinbase.com/checkouts/490151efc6acdfdeb1a23537b150cae7">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
+    </div>
+    <h4>Content Links</h4>
+    <ul>
+        <li><a href="http://tamperevident.cs.rice.edu/">Tamper-Evident Data Structures</a></li>
+        <li>Felten's Game Theoretic Analysis of Bitcoin</li>
+        <li>Building Fork-Evident Logs with Bitcoin</li>
+    </ul>
+    <h4>Site Links</h4>
+    <ul>
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("API", "Index", "Documentation")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+</aside>

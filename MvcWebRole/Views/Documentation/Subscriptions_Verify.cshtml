@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "POST /api/subscriptions/verify";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Authenticated resource that verifies an email address for a recently created subscription for an Application Log.</p>
+
+<p><strong>Note:</strong> The API Key for the subscription provided to this method will come from the verification email.</p>
+<p><strong>Note:</strong> This API can be used to cancel a subscription at any time, even after having already verified.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+POST https://www.letmelogthatforyou.com/api/subscriptions/verify
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "a434f00b-2bde-40b8-b5d4-e9ce9e312863",
+  "LogName": "ErrorEvent",
+  "Action": "Confirm"
+}
+
+# Response
+{
+  "Message": "Verified",
+  "Success": true
+}
+</pre>
+<pre class="codeexample">
+# Re-sending Request
+POST https://www.letmelogthatforyou.com/api/subscriptions/verify
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "a434f00b-2bde-40b8-b5d4-e9ce9e312863",
+  "LogName": "ErrorEvent",
+  "Action": "Confirm"
+}
+
+# Response
+{
+  "Message": "Already verified previously",
+  "Success": true
+}
+</pre>
+
+<pre class="codeexample">
+# Canceling Subscription Instead
+POST https://www.letmelogthatforyou.com/api/subscriptions/verify
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "a434f00b-2bde-40b8-b5d4-e9ce9e312863",
+  "LogName": "ErrorEvent",
+  "Action": "Cancel"
+}
+
+# Response
+{
+  "Message": "Cancelled",
+  "Success": true
+}
+</pre>
+
+<pre class="codeexample">
+# Verifying with incorrect API Key
+POST https://www.letmelogthatforyou.com/api/subscriptions/verify
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "not-the-api-key",
+  "LogName": "ErrorEvent",
+  "Action": "Confirm"
+}
+
+# Response
+HTTP response code: 401 for URL: https://www.letmelogthatforyou.com/api/subscriptions/verify
+{
+  "Error": "Unauthorized API Key",
+  "Success": false
+}
+</pre>
+
+<pre class="codeexample">
+# Verifying non-existent app
+POST https://www.letmelogthatforyou.com/api/subscriptions/verify
+{
+  "ApplicationName": "NotTheApp",
+  "APIKey": "a434f00b-2bde-40b8-b5d4-e9ce9e312863",
+  "LogName": "ErrorEvent",
+  "Action": "Confirm"
+}
+
+# Response
+{
+  "Success": false,
+  "Error": "No such subscription exists"
+}
+</pre>
+
+<h1>Parameters</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Name</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">
+                <h5>ApplicationName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Application.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>LogName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Log.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>APIKey</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Unique, secret API Key associated with the given log as received in the verification email to the email address used when subscribing.</p>
+                <p>Only API Keys matching the standard GUID pattern (including dashes) will be accepted.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>Action</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Action to be taken for verification.</p>
+                <p>"Confirm" will verify and complete the subscription process.  Anything else will cancel the subscription.</p>
+            </td>
+        </tr>
+    </tbody>
+</table>

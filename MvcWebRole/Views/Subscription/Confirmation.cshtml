@@ -1,0 +1,28 @@
+﻿@model MvcWebRole.Models.Subscription
+
+@{
+    ViewBag.Title = "Subscription Result";
+}
+
+<h2>Successfully Subscribed!</h2>
+
+<p>
+    You have successfully subscribed <code>@Html.DisplayFor(model => model.ApplicationName)</code>'s Log "<code>@Html.DisplayFor(model => model.LogName)</code>" to the logging service!
+</p>
+
+<p>
+    A verification email will be sent to <code>@Html.DisplayFor(model => model.EmailAddress)</code> soon.
+</p>
+
+<p>
+    With each subscription comes an APIKey, which functions as a password for all actions involving an application-specific log.  Thus for all requests requiring authentication (such as adding a snapshot to the logging service, editing a snapshot, or unsubscribing), this unique key <strong><em>MUST</em></strong> be provided.
+    If you lose this API Key, there is no way currently for you to recover or reset it.
+</p>
+
+<p>
+    This API Key will be present in the verification email as well as displayed in the confirmation link.
+</p>
+
+<p>
+    @Html.ActionLink("Return to Subscribers", "Index")
+</p>

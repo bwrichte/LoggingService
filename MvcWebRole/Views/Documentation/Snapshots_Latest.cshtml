@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "GET /api/snapshots/latest";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Unauthenticated resource that returns all of the snapshots logged for the current time block.</p>
+
+<p><strong>Note</strong>: These snapshots will either be <code>"Pending"</code> or <code>"Processing"</code>, and none of them will represent snapshots for which proofs have been generated.</p>
+<p><strong>Note</strong>: This method does not currently implement paging, but will in the future.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+GET https://www.letmelogthatforyou.com/api/snapshots/latest
+
+# Response
+{
+  "Snapshots": [{
+    "ApplicationName": "MyApp",
+    "Status": "Pending",
+    "LogName": "ErrorEvent",
+    "SnapshotValue": "9ce8af702000f0bd857f4572fb96418db26881bd735ef21e0215809c12f8bef7",
+    "TimeBlock": "2013-04-23T06:48:00Z"
+  }],
+  "Success": true
+}
+</pre>

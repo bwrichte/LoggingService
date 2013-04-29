@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "GET /api/subscriptions/subscribers";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Unauthenticated resource that returns a full list of subscribers.</p>
+
+<p><strong>Note</strong>: This method does not currently implement paging, but will in the future.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+GET https://www.letmelogthatforyou.com/api/subscriptions/subscribers
+
+# Response
+{
+  "Success": true,
+  "Subscriptions": [
+    {
+      "ApplicationName": "LetMeLogThatForYou",
+      "VerificationsSent": 1,
+      "Description": "Testing Azure Storage",
+      "LogName": "TestLog",
+      "Verified": true
+    },
+    {
+      "ApplicationName": "MyApp",
+      "VerificationsSent": 1,
+      "Description": "null",
+      "LogName": "WarnEvent",
+      "Verified": true
+    },
+    {
+      "ApplicationName": "MyApp",
+      "VerificationsSent": 2,
+      "Description": "My second log",
+      "LogName": "ErrorEvent",
+      "Verified": false
+    }
+  ]
+}
+</pre>

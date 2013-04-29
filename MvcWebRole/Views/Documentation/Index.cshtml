@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "API Overview";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>Easily build fork-evident logs.</h2>
+</hgroup>
+
+<p>In addition to the webfront interface, <span class="smallcaps">LetMeLogThatForYou</span> provides simple but fully functional <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> API to integrate the global logging service programmatically into any client application.</p>
+
+<p>All requests should use the <code>application/json</code> content type and go over <code>https</code>.  Not all method require the latter, only the authenticated resources where the API Key is being explicitly specified, but this is good practice to use <code>https</code> whenever possible.</p>
+
+<p>If you have any feedback on the API you can @Html.ActionLink("contact us", "Contact", "Home").</p>
+
+<p><strong>Note</strong>: The base URL for the API is <code>https://www.letmelogthatforyou.com/api/</code>.
+<p><strong>Note</strong>: The current location to download Proofs from is <code>https://letmelogthatforyou.blob.core.windows.net/&lt;PROOF-LOCATION&gt;</code>.</p>
+<p><strong>Note</strong>: All authenticated resources are authorized by providing the API Key given to you in the verification email upon a successful subscriptions.</p>
+
+<h1>Subscriptions</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Resource</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("GET /api/subscriptions/subscribers", "Subscriptions_Subscribers")</td>
+            <td class="desccol">Get the list of subscribers.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("GET /api/subscriptions/apps", "Subscriptions_Apps")</td>
+            <td class="desccol">Get the list of subscribed applications.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("GET /api/subscriptions/logs", "Subscriptions_Logs")</td>
+            <td class="desccol">Get the list of logs associated with an application name.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("POST /api/subscriptions/subscribe", "Subscriptions_Subscribe")</td>
+            <td class="desccol">Signup a new Application Log.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("POST /api/subscriptions/verify", "Subscriptions_Verify")</td>
+            <td class="desccol">Update a subscription to confirm its email address.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Snapshots</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Resource</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("GET /api/snapshots/latest", "Snapshots_Latest")</td>
+            <td class="desccol">Get the snapshots logged for the current time block.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("POST /api/snapshots/log", "Snapshots_Log")</td>
+            <td class="desccol">Put a hex-encoded string into the global log.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Proofs</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Resource</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("GET /api/proofs/:app", "Proofs_App")</td>
+            <td class="desccol">Get the proofs for the specified application.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("GET /api/proofs/:app/:log", "Proofs_App_Log")</td>
+            <td class="desccol">Get the proofs for the specified application log.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("POST /api/proofs/proofs-query", "Proofs_Proofs_Query")</td>
+            <td class="desccol">Get the proofs matching the specified query.</td>
+        </tr>
+        <tr>
+            <td class="resourcecol">@Html.ActionLink("POST /api/proofs/proofs-audit", "Proofs_Proofs_Audit")</td>
+            <td class="desccol">Audit a specified proof to populate Bitcoin information.</td>
+        </tr>
+    </tbody>
+</table>

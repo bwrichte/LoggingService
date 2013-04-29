@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "POST /api/proofs/proofs-query";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Unauthenticated resource that returns all of the proofs matching a specified query.</p>
+
+<p><strong>Note</strong>: This method is strictly more powerful than @Html.ActionLink("GET /api/proofs/:app", "Proofs_App") and @Html.ActionLink("GET /api/proofs/:app/:log", "Proofs_App_Log") as it can also be used to query for proofs from an application or from a specific application log.</p>
+<p><strong>Note</strong>: This method does not currently implement paging, but will in the future.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-query
+{
+  "ApplicationName": "MyApp",
+  "LogName": "ErrorEvent",
+  "QueryComparison": "LessThanOrEqual",
+  "TimeBlock": "4/23/2013 7:10:00 AM"
+}
+
+# Response
+{
+  "Proofs": [
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_ErrorEvent_635022964800000000.proof",
+      "LogName": "ErrorEvent",
+      "CoinbaseTransactionID": "51762ea4be3da18ccc00001c",
+      "SnapshotValue": "9ce8af702000f0bd857f4572fb96418db26881bd735ef21e0215809c12f8bef7",
+      "TimeBlock": "4/23/2013 6:48:00 AM"
+    },
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_ErrorEvent_635022974400000000.proof",
+      "LogName": "ErrorEvent",
+      "CoinbaseTransactionID": "517632644551a60c64000025",
+      "SnapshotValue": "deadbeef",
+      "TimeBlock": "4/23/2013 7:04:00 AM"
+    }
+  ],
+  "Success": true
+}
+</pre>
+
+<pre class="codeexample">
+# Querying only for an application
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-query
+{
+  "ApplicationName": "MyApp"
+}
+
+# Response
+{
+  "Proofs": [
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_ErrorEvent_635022964800000000.proof",
+      "LogName": "ErrorEvent",
+      "CoinbaseTransactionID": "51762ea4be3da18ccc00001c",
+      "SnapshotValue": "9ce8af702000f0bd857f4572fb96418db26881bd735ef21e0215809c12f8bef7",
+      "TimeBlock": "4/23/2013 6:48:00 AM"
+    },
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_ErrorEvent_635022974400000000.proof",
+      "LogName": "ErrorEvent",
+      "CoinbaseTransactionID": "517632644551a60c64000025",
+      "SnapshotValue": "deadbeef",
+      "TimeBlock": "4/23/2013 7:04:00 AM"
+    },
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_WarnEvent_635022739200000000.proof",
+      "LogName": "WarnEvent",
+      "CoinbaseTransactionID": "5175d68845600269c5000018",
+      "SnapshotValue": "0FFEBCDD9876",
+      "TimeBlock": "4/23/2013 12:32:00 AM"
+    }
+  ],
+  "Success": true
+}
+</pre>
+
+<pre class="codeexample">
+# Querying for Non-Existent App
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-query
+{
+  "ApplicationName": "NoSuchApp",
+  "LogName": "ErrorEvent",
+  "QueryComparison": "LessThanOrEqual",
+  "TimeBlock": "4/23/2013 7:10:00 AM"
+}
+
+# Response
+{
+  "Success": false,
+  "Error": "Subscriber does not exist"
+}
+</pre>
+
+<pre class="codeexample">
+# Querying for Non-Existent TimeBlock
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-query
+{
+  "ApplicationName": "MyApp",
+  "LogName": "ErrorEvent",
+  "QueryComparison": "Equal",
+  "TimeBlock": "4/23/2013 7:10:00 AM"
+}
+
+# Response
+{
+  "Proofs": [],
+  "Success": true
+}
+</pre>
+
+<pre class="codeexample">
+# Query missing inconsistent information
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-query
+{
+  "ApplicationName": "MyApp",
+  "QueryComparison": "LessThanOrEqual",
+  "TimeBlock": "4/23/2013 7:10:00 AM"
+}
+
+# Response
+{
+  "Success": false,
+  "Error": "Cannot query for Specific TimeBlock without Specific Log"
+}
+</pre>
+
+<h1>Parameters</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Name</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">
+                <h5>ApplicationName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Application.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>LogName</h5>
+                <em>Optional</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Log.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.  Must be specified if a TimeBlock is specified.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>TimeBlock</h5>
+                <em>Optional</em>
+            </td>
+            <td class="desccol">
+                <p>DateTime of the TimeBlock that is being queried, defaults to current time if not provided.</p>
+                <p>Accepts nearly any valid DateTime format (e.g. "635021076000000000", "2013-04-21T02:20:00", "4/21/2013 3:56:00 AM", etc).  If specified, LogName must also be specified.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>QueryComparison</h5>
+                <em>Optional</em>
+            </td>
+            <td class="desccol">
+                <p>Specifies how the query will compare to the actual proof TimeBlocks.  Default is LessThanOrEqual.</p>
+                <p>Possible values are "LessThan", "LessThanOrEqual", "Equal", "GreaterThanOrEqual", or "GreaterThan". </p>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Proof Search";
+}
+
+<h2>Proof Search</h2>
+
+@using (Html.BeginForm("GetProofs", "Proof", FormMethod.Get))
+{
+    <fieldset>
+        <legend>Application-Log Subscription for Logging Service</legend>
+
+        <div class="editor-label">
+            Application Name
+        </div>
+        <div class="editor-field">
+            @Html.Editor("appName")
+        </div>
+
+        <div class="editor-label">
+            Log Name
+        </div>
+        <div class="editor-field">
+            @Html.Editor("logName")
+        </div>
+
+        <p>
+            <input type="submit"/>
+        </p>
+    </fieldset>
+}

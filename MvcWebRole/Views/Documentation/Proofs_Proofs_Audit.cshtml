@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "POST /api/proofs/proofs-audit";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Unauthenticated resource that "audits" a proof by requesting its Bitcoin information (e.g. <code>BitcoinTransactionHash</code> and <code>BitcoinBlockNumber</code>) be populated into the proof and returned if available.</p>
+
+<p><strong>Note</strong>: This method is currently a no-op until Coinbase integration can be fully completed.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-audit
+{
+  "ApplicationName": "MyApp",
+  "LogName": "ErrorEvent",
+  "TimeBlock": "4/23/2013 7:04:00 AM"
+}
+
+# Response
+{
+  "Proof": {
+    "ApplicationName": "MyApp",
+    "ProofLocation": "MyApp_ErrorEvent_635022974400000000.proof",
+    "LogName": "ErrorEvent",
+    "CoinbaseTransactionID": "517632644551a60c64000025",
+    "SnapshotValue": "deadbeef",
+    "TimeBlock": "4/23/2013 7:04:00 AM"
+  },
+  "Success": true
+}   
+</pre>
+
+<pre class="codeexample">
+# Request to Audit without TimeBlock Specified
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-audit
+{
+  "ApplicationName": "MyApp",
+  "LogName": "ErrorEvent"
+}
+
+# Response
+{
+  "Proof": {
+    "ApplicationName": "MyApp",
+    "ProofLocation": "MyApp_ErrorEvent_635022974400000000.proof",
+    "LogName": "ErrorEvent",
+    "CoinbaseTransactionID": "517632644551a60c64000025",
+    "SnapshotValue": "deadbeef",
+    "TimeBlock": "4/23/2013 7:04:00 AM"
+  },
+  "Success": true
+}  
+</pre>
+
+<pre class="codeexample">
+# Auditing non-existent app
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-audit
+{
+  "ApplicationName": "DoesNotExist",
+  "LogName": "ErrorEvent"
+}
+
+# Response
+{
+  "Success": false,
+  "Error": "Subscriber does not exist"
+}
+</pre>
+
+<pre class="codeexample">
+# Auditing without Log
+POST https://www.letmelogthatforyou.com/api/proofs/proofs-audit
+{
+  "ApplicationName": "MyApp"
+}
+
+# Response
+{
+  "Success": false,
+  "Error": "Must provide a Log Name to Audit"
+}
+</pre>
+
+<h1>Parameters</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Name</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">
+                <h5>ApplicationName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Application.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>LogName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>The name of the Log.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>TimeBlock</h5>
+                <em>Optional</em>
+            </td>
+            <td class="desccol">
+                <p>DateTime TimeBlock of the Log that is being audited, defaults to most recent TimeBlock for that log otherwise.</p>
+                <p>Accepts nearly any valid DateTime format (e.g. "635021076000000000", "2013-04-21T02:20:00", "4/21/2013 3:56:00 AM", etc).</p>
+            </td>
+        </tr>
+    </tbody>
+</table>

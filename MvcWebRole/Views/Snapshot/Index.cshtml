@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MvcWebRole.Models.Snapshot>
+
+@{
+    ViewBag.Title = "Snapshots";
+}
+
+<h2>Snapshots</h2>
+
+<p>
+    @Html.ActionLink("Log New Snapshot", "Log")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LogName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SnapshotValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LogName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SnapshotValue)
+            </td>
+            <td>
+                @item.Status
+            </td>
+        </tr>
+    }
+
+</table>

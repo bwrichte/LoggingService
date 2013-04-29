@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MvcWebRole.Models.Subscription>
+
+@{
+    ViewBag.Title = "Snapshot Subscriber Lists";
+}
+
+<h2>Snapshot Subscriber Lists</h2>
+
+<p>
+    @Html.ActionLink("Subscribe to Service", "Subscribe")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LogName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Verified)
+        </th>
+        <th>
+            
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LogName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.CheckBox("Verified", item.Verified == true, new { disabled = "disabled" })
+        </td>
+        <td>
+            @if (item.Verified == true)
+            {
+                @Html.ActionLink("Proofs", "GetProofs", "Proof", new { appName = item.ApplicationName, logName = item.LogName }, null)
+            }
+        </td>
+    </tr>
+}
+
+</table>

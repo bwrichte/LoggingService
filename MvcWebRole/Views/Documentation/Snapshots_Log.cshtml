@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "POST /api/snapshots/log";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Authenticated resource that submits a snapshot to be logged in the global log for the current timeblock.</p>
+
+<p><strong>Note</strong>: Snapshots will only be included in the global log approximately every 10 minutes, so logging at a faster rate will be of little help and is ill-advised.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+POST https://www.letmelogthatforyou.com/api/snapshots/log
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "d0d4011b-cf6e-4054-ba1b-8c0fdacbe381",
+  "LogName": "ErrorEvent",
+  "SnapshotValue": "9ce8af702000f0bd857f4572fb96418db26881bd735ef21e0215809c12f8bef7"
+}
+
+# Response
+{
+  "Message": "Created Snapshot, Logging is Pending",
+  "Success": true,
+  "Snapshot": {
+    "ApplicationName": "MyApp",
+    "Status": "Pending",
+    "LogName": "ErrorEvent",
+    "SnapshotValue": "9ce8af702000f0bd857f4572fb96418db26881bd735ef21e0215809c12f8bef7",
+    "TimeBlock": "2013-04-23T07:04:00"
+  }
+}
+</pre>
+<pre class="codeexample">
+# Re-sending Request in TimeBlock with Different Value
+POST https://www.letmelogthatforyou.com/api/snapshots/log
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "d0d4011b-cf6e-4054-ba1b-8c0fdacbe381",
+  "LogName": "ErrorEvent",
+  "SnapshotValue": "deadbeef"
+}
+
+# Response
+{
+  "Message": "Updated existing Snapshot, Logging is still Pending",
+  "Success": true,
+  "Snapshot": {
+    "ApplicationName": "MyApp",
+    "Status": "Pending",
+    "LogName": "ErrorEvent",
+    "SnapshotValue": "deadbeef",
+    "TimeBlock": "2013-04-23T07:04:00"
+  }
+}
+</pre>
+
+<pre class="codeexample">
+# Logging with incorrect API Key
+POST https://www.letmelogthatforyou.com/api/snapshots/log
+{
+  "ApplicationName": "MyApp",
+  "APIKey": "not-the-api-key",
+  "LogName": "ErrorEvent",
+  "Action": "Confirm"
+}
+
+# Response (if misformatted)
+{
+  "Errors": ["Must be a valid APIKey (GUID-format)"],
+  "Success": false,
+  "Snapshot": {
+    "ApplicationName": "MyApp",
+    "LogName": "ErrorEvent",
+    "SnapshotValue": "deadbeef",
+    "TimeBlock": "2013-04-23T07:04:00"
+  }
+}
+# Response (if just invalid)
+HTTP response code: 401 for URL: https://www.letmelogthatforyou.com/api/snapshots/log
+{
+  "Error": "Unauthorized API Key",
+  "Success": false
+}
+</pre>
+
+<pre class="codeexample">
+# Verifying non-existent app
+POST https://www.letmelogthatforyou.com/api/snapshots/log
+{
+  "ApplicationName": "DoesNotExist",
+  "APIKey": "e0d4011b-cf6e-4054-ba1b-8c0fdacbe381",
+  "LogName": "ErrorEvent",
+  "SnapshotValue": "deadbeef"
+}
+
+# Response
+{
+  "Success": false,
+  "Error": "Such a log has not been subscribed"
+}
+</pre>
+
+<h1>Parameters</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Name</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">
+                <h5>ApplicationName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Application.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>LogName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Log.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>APIKey</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Unique, secret API Key associated with the given log as received in the verification email to the email address used when subscribing.</p>
+                <p>Only API Keys matching the standard GUID pattern (including dashes) will be accepted.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>SnapshotValue</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Value to be included in global log.</p>
+                <p>Value must be a hex encoded string (meaning 2 hex digits per byte, for a total of an even number of bytes) and cannot be longer than 1024 characters total.</p>
+            </td>
+        </tr>
+    </tbody>
+</table>

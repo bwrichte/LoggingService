@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "POST /api/subscriptions/subscribe";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Unauthenticated resource that creates a new subscription for an Application Log and associates it with a provided email address.</p>
+
+<p><strong>Note:</strong> The API Key for the subscription will not be returned by this method.  Rather, the API Key will be present in the verification email sent to the registered email along with a verification link.</p>
+<p><strong>Note:</strong> Re-sending a subscription request will re-add the user to the subscribe queue a maximum of 3 times, after which point no more verification emails we be sent.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+POST https://www.letmelogthatforyou.com/api/subscriptions/subscribe
+{
+  "ApplicationName": "MyApp",
+  "Description": "My second log",
+  "LogName": "ErrorEvent",
+  "EmailAddress": "email@email.com"
+}
+
+# Response
+{
+  "Subscription": {
+    "ApplicationName": "MyApp",
+    "VerificationsSent": 0,
+    "Description": "My second log",
+    "LogName": "ErrorEvent",
+    "EmailAddress": "bwrichte@princeton.edu",
+    "Verified": false
+  },
+  "Message": "Added to Subscriber Queue",
+  "Success": true
+}
+</pre>
+<pre class="codeexample">
+# Re-sending Request
+POST https://www.letmelogthatforyou.com/api/subscriptions/subscribe
+{
+  "ApplicationName": "MyApp",
+  "Description": "My second log",
+  "LogName": "ErrorEvent",
+  "EmailAddress": "email@email.com"
+}
+
+# Response
+{
+  "Subscription": {
+    "ApplicationName": "MyApp",
+    "VerificationsSent": 1,
+    "Description": "My second log",
+    "LogName": "ErrorEvent",
+    "EmailAddress": "email@email.com",
+    "Verified": false
+  },
+  "Message": "Re-added to subscriber queue",
+  "Success": true
+}
+</pre>
+<pre class="codeexample">
+# Subscribing an already subscribed Application Request
+POST https://www.letmelogthatforyou.com/api/subscriptions/subscribe
+{
+  "ApplicationName": "MyApp",
+  "Description": "My second log",
+  "LogName": "ErrorEvent",
+  "EmailAddress": "email@email.com"
+}
+
+# Response
+{
+  "Subscription": {
+    "ApplicationName": "MyApp",
+    "Description": "My second log",
+    "LogName": "ErrorEvent",
+    "EmailAddress": "email@email.com"
+  },
+  "Success": false,
+  "Error": "You attempted to subscribe an already subscribed App with that Log Name"
+}
+</pre>
+<pre class="codeexample">
+# Sending an incomplete request
+POST https://www.letmelogthatforyou.com/api/subscriptions/subscribe
+{
+  "Description": "My second log",
+  "LogName": "ErrorEvent",
+  "EmailAddress": "email@email.com"
+}
+
+# Response
+{
+  "Subscription": {
+    "ApplicationName": "null",
+    "Description": "My second log",
+    "LogName": "null",
+    "EmailAddress": "bwrichte@princeton.edu"
+  },
+  "Errors": [
+    "The ApplicationName field is required.",
+    "The LogName field is required."
+  ],
+  "Success": false
+}
+</pre>
+<pre class="codeexample">
+# Invalid parameter request
+POST https://www.letmelogthatforyou.com/api/subscriptions/subscribe
+{
+  "ApplicationName": "MyApp[]",
+  "Description": "My second log",
+  "LogName": "ErrorEvent",
+  "EmailAddress": "email@email.com"
+}
+
+# Response
+{
+  "Subscription": {
+    "ApplicationName": "MyApp[]",
+    "Description": "My second log",
+    "LogName": "ErrorEvent",
+    "EmailAddress": "email@email.com"
+  },
+  "Errors": ["Only alphanumeric characters and underscore (_) are allowed."],
+  "Success": false
+}
+</pre>
+
+<h1>Parameters</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Name</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">
+                <h5>ApplicationName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Application.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>LogName</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Email address to be verified for this application's log.</p>
+                <p>Only validly formed email address strings are accepted.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>EmailAddress</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Log.</p>
+                <p>Only alphanumeric characters and underscore (_) are allowed.  The string cannot be longer than 128 characters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="resourcecol">
+                <h5>Description</h5>
+                <em>Optional</em>
+            </td>
+            <td class="desccol">
+                <p>Description of / purpose for the log.</p>
+                <p>String cannot be longer than 256 characters.</p>
+            </td>
+        </tr>
+    </tbody>
+</table>

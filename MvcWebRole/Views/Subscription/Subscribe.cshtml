@@ -1,0 +1,56 @@
+﻿@model MvcWebRole.Models.Subscription
+
+@{
+    ViewBag.Title = "Subscribe to Post Snapshots";
+}
+
+<h2>Subscribe to Post Snapshots</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Application-Log Subscription for Logging Service</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApplicationName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ApplicationName)
+            @Html.ValidationMessageFor(model => model.ApplicationName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LogName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LogName)
+            @Html.ValidationMessageFor(model => model.LogName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EmailAddress)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EmailAddress)
+            @Html.ValidationMessageFor(model => model.EmailAddress)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+
+        <p>
+            <input type="submit" value="Subscribe" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to Subscriber List", "Index")
+</div>

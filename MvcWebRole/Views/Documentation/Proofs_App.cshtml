@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "GET /api/proofs/:app";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="apidesc">Unauthenticated resource that returns all of the proofs for the application specified in the path.</p>
+
+<p><strong>Note</strong>: This method does not currently implement paging, but will in the future.</p>
+
+<h1>Examples</h1>
+<pre class="codeexample">
+# Request
+GET https://www.letmelogthatforyou.com/api/proofs/MyApp
+
+# Response
+{
+  "Proofs": [
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_ErrorEvent_635022964800000000.proof",
+      "LogName": "ErrorEvent",
+      "CoinbaseTransactionID": "51762ea4be3da18ccc00001c",
+      "SnapshotValue": "9ce8af702000f0bd857f4572fb96418db26881bd735ef21e0215809c12f8bef7",
+      "TimeBlock": "4/23/2013 6:48:00 AM"
+    },
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_ErrorEvent_635022974400000000.proof",
+      "LogName": "ErrorEvent",
+      "CoinbaseTransactionID": "517632644551a60c64000025",
+      "SnapshotValue": "deadbeef",
+      "TimeBlock": "4/23/2013 7:04:00 AM"
+    },
+    {
+      "ApplicationName": "MyApp",
+      "ProofLocation": "MyApp_WarnEvent_635022739200000000.proof",
+      "LogName": "WarnEvent",
+      "CoinbaseTransactionID": "5175d68845600269c5000018",
+      "SnapshotValue": "0FFEBCDD9876",
+      "TimeBlock": "4/23/2013 12:32:00 AM"
+    }
+  ],
+  "Success": true
+}
+</pre>
+<pre class="codeexample">
+# Requesting a non-existing application
+POST https://www.letmelogthatforyou.com/api/proofs/DoesNotExist
+
+# Response
+{
+  "Success": false,
+  "Error": "DoesNotExist has no Subscriptions"
+}
+</pre>
+
+<h1>Parameters</h1>
+<table class="doctable">
+    <thead>
+        <tr>
+            <th class="resourcecol">Name</th>
+            <th class="desccol">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="resourcecol">
+                <h5>:app</h5>
+                <em>Required</em>
+            </td>
+            <td class="desccol">
+                <p>Name of the Application.</p>
+                <p>This name must be placed as part of the GET URL path.</p>
+            </td>
+        </tr>
+    </tbody>
+</table>

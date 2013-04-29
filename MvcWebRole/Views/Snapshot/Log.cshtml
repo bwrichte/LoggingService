@@ -1,0 +1,58 @@
+﻿@model MvcWebRole.Models.Snapshot
+
+@{
+    ViewBag.Title = "Log Snapshot";
+}
+
+<h2>Log Your Snapshot</h2>
+
+@using (Html.BeginForm("Log", "Snapshot", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+     @Html.AntiForgeryToken()
+     @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Snapshot</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApplicationName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ApplicationName)
+            @Html.ValidationMessageFor(model => model.ApplicationName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LogName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LogName)
+            @Html.ValidationMessageFor(model => model.LogName)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.APIKey)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.APIKey)
+            @Html.ValidationMessageFor(model => model.APIKey)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SnapshotValue)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SnapshotValue)
+            @Html.ValidationMessageFor(model => model.SnapshotValue)
+        </div>
+
+        <p>
+            <input type="submit" value="Log" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to Snapshots", "Index")
+</div>
+

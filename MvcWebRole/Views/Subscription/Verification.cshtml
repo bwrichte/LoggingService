@@ -1,0 +1,58 @@
+﻿@model MvcWebRole.Models.Subscription
+
+@{
+    ViewBag.Title = "Subscription Confirmation";
+}
+
+<h2>Logging Service Subscription Confirmation</h2>
+@if (Model != null) {
+    using(@Html.BeginForm("Verify", "Subscription", FormMethod.Post)){
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Subscribe to Loggin Service</legend>
+
+            @Html.HiddenFor(model => model.ApplicationName)
+            @Html.HiddenFor(model => model.LogName)
+            @Html.HiddenFor(model => model.APIKey)
+
+            @if (Model.Verified == false) {
+                <p>
+                    Do you want to subscribe  @Html.DisplayFor(model => model.EmailAddress) to the Logging Service for @Html.DisplayFor(model => model.ApplicationName)'s Log "<code>@Html.DisplayFor(model => model.LogName)</code>"?
+               </p>
+                <br />
+                <p>
+                    <input type="submit" value="Confirm" name="action"/> 
+                    &nbsp; &nbsp;
+                    <input type="submit" value="Cancel" name ="action"/>
+                </p>
+            }
+            @if (Model.Verified == true) {
+                <p>
+                    @Html.DisplayFor(model => model.ApplicationName)'s Log "<code>@Html.DisplayFor(model => model.LogName)</code>" was successfully subscribed to the Logging Service under the email @Html.DisplayFor(model => model.EmailAddress).
+                </p>
+                <p>
+                    Once again your API Key is <code>@Html.DisplayFor(model => model.APIKey)</code>
+                </p>
+                @Html.ActionLink("Return to Subscribers", "Index")
+            }
+            @if (Model.Verified == null) {
+                <p>
+                    @Html.DisplayFor(model => model.EmailAddress) has denied subscription to the Logging Service for @Html.DisplayFor(model => model.ApplicationName)'s Log "<code>@Html.DisplayFor(model => model.LogName)</code>".
+                </p>
+                @Html.ActionLink("Return to Subscribers", "Index")
+            }
+        </fieldset>
+    }
+}
+
+@if (Model == null)
+{
+    @Html.ValidationSummary(true)
+    @Html.ActionLink("Return to Subscribers", "Index")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
